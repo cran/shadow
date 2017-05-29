@@ -8,6 +8,7 @@
 #' @param res_angle Circular sampling resolution, in decimal degrees. Default is 5 degrees, i.e. 0, 5, 10... 355.
 #' @param b Buffer size when joining intersection points with building outlines, to determine intersection height
 #' @param messages Whether a message regarding distance units of the CRS should be displayed
+#' @param parallel Number of parallel processes or a predefined socket cluster. With \code{parallel = 1} uses ordinary, non-parallel processing. The parallel processing is done with the \code{parallel} package
 #'
 #' @return A numeric value between 0 (sky completely obstructed) and 1 (sky completely visible).
 #'\itemize{
@@ -35,13 +36,14 @@
 #'
 #' # Grid
 #' ext = as(raster::extent(rishon), "SpatialPolygons")
-#' r = raster::raster(ext, res = 10)
+#' r = raster::raster(ext, res = 5)
 #' proj4string(r) = proj4string(rishon)
 #' pnt = raster::rasterToPoints(r, spatial = TRUE)
 #' svfs = SVF(
 #'     location = r,
 #'     obstacles = rishon,
-#'     obstacles_height_field = "BLDG_HT"
+#'     obstacles_height_field = "BLDG_HT",
+#'     parallel = 3
 #'   )
 #' plot(svfs, col = grey(seq(0.9, 0.2, -0.01)))
 #' raster::contour(svfs, add = TRUE)
@@ -84,7 +86,8 @@ function(
   obstacles_height_field,
   res_angle = 5,
   b = 0.01,
-  messages = TRUE
+  messages = TRUE,
+  parallel = getOption("mc.cores")
   ) {
 
   # Checks
@@ -94,19 +97,78 @@ function(
   # Buildings outline to 'lines' *** DEPENDS ON PACKAGE 'sp' ***
   obstacles_outline = as(obstacles, "SpatialLinesDataFrame")
 
-  # Results vector
-  result = rep(NA, length(location)) # Elements represent *space*
+  # Iteration over locations
 
-  # 'for' loop iteration over locations and times
-  for(i in 1:length(result)) {
+  # Parallel
+  if(is.null(parallel)) parallel = 1
+  hasClus = inherits(parallel, "cluster")
 
-    result[i] = .SVFPnt(
-      location = location[i, ],
-      obstacles = obstacles,
-      obstacles_height_field = obstacles_height_field,
-      res_angle = res_angle,
-      b = b
+  # 'for' loop
+  if(parallel == 1) {
+
+    # Results vector
+    result = rep(NA, length(location))
+
+    for(i in 1:length(result)) {
+
+      result[i] = .SVFPnt(
+        location = location[i, ],
+        obstacles = obstacles,
+        obstacles_height_field = obstacles_height_field,
+        res_angle = res_angle,
+        b = b
+      )
+
+    }
+
+  } else {
+
+    location_df = sp::SpatialPointsDataFrame(
+      location,
+      data.frame(id = 1:length(location))
     )
+    location_split = split(location_df, location_df$id)
+
+    if(hasClus || parallel > 1) {
+
+      if(.Platform$OS.type == "unix" && !hasClus) {
+
+        result = parallel::mclapply(
+          location_split,
+          .SVFPnt,
+          obstacles = obstacles,
+          obstacles_height_field = obstacles_height_field,
+          res_angle = res_angle,
+          b = b,
+          mc.cores = parallel
+          )
+
+        result = simplify2array(result)
+
+      } else {
+
+        if(!hasClus) {
+          parallel = parallel::makeCluster(parallel)
+        }
+
+        result = parallel::parLapply(
+          parallel,
+          X = location_split,
+          fun = .SVFPnt,
+          obstacles = obstacles,
+          obstacles_height_field = obstacles_height_field,
+          res_angle = res_angle,
+          b = b
+        )
+
+        result = simplify2array(result)
+
+        if(!hasClus)
+          parallel::stopCluster(parallel)
+
+      }
+
+    }
 
   }
 
@@ -136,7 +198,8 @@ setMethod(
     obstacles_height_field,
     res_angle = 5,
     b = 0.01,
-    messages = TRUE
+    messages = TRUE,
+    parallel = getOption("mc.cores")
   ) {
 
     # Keep first raster layer only
@@ -151,7 +214,8 @@ setMethod(
       obstacles_height_field = obstacles_height_field,
       res_angle = res_angle,
       b = b,
-      messages = messages
+      messages = messages,
+      parallel = parallel
     )
 
     return(location)

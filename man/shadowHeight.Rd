@@ -3,15 +3,16 @@
 \docType{methods}
 \name{shadowHeight}
 \alias{shadowHeight}
-\alias{shadowHeight,Raster-method}
 \alias{shadowHeight,SpatialPoints-method}
+\alias{shadowHeight,Raster-method}
 \title{Shadow height calculation considering sun position and obstacles}
 \usage{
 \S4method{shadowHeight}{SpatialPoints}(location, obstacles,
-  obstacles_height_field, solar_pos, b = 0.01, messages = TRUE)
+  obstacles_height_field, solar_pos, b = 0.01, messages = TRUE,
+  parallel = getOption("mc.cores"))
 
 \S4method{shadowHeight}{Raster}(location, obstacles, obstacles_height_field,
-  solar_pos, b = 0.01, messages = TRUE)
+  solar_pos, b = 0.01, messages = TRUE, parallel = getOption("mc.cores"))
 }
 \arguments{
 \item{location}{A \code{SpatialPoints*} or \code{Raster*} object, specifying the location(s) for which to calculate shadow height}
@@ -25,6 +26,8 @@
 \item{b}{Buffer size when joining intersection points with building outlines, to determine intersection height}
 
 \item{messages}{Whether a message regarding distance units of the CRS should be displayed}
+
+\item{parallel}{Number of parallel processes or a predefined socket cluster. With \code{parallel = 1} uses ordinary, non-parallel processing. The parallel processing is done with the \code{parallel} package}
 }
 \value{
 Shadow height, in CRS units (e.g. meters). \code{NA} value means no shadow, \code{Inf} means complete shadow (i.e. sun below horizon).
@@ -96,12 +99,12 @@ shadow = shadowHeight(
     obstacles = rishon,
     obstacles_height_field = "BLDG_HT",
     solar_pos = solar_pos,
-    messages = FALSE
+    messages = FALSE,
+    parallel = 3
   )
-plot(shadow, col = grey(seq(0.9, 0.2, -0.01)), main = time)
-raster::contour(shadow, add = TRUE)
+plot(shadow[[1]], col = grey(seq(0.9, 0.2, -0.01)), main = time)
+raster::contour(shadow[[1]], add = TRUE)
 plot(rishon, add = TRUE, border = "red")
 
 }
 }
-

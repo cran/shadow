@@ -15,6 +15,11 @@
 #' plot(seg, col = sample(rainbow(length(seg))))
 #' raster::text(rgeos::gCentroid(seg, byid = TRUE), 1:length(seg))
 #'
+#' # Other data structures
+#' toSeg(geometry(build)) # SpatialPolygons
+#' toSeg(sidewalk) # SpatialLinesDataFrame
+#' toSeg(geometry(sidewalk)) # SpatialLinesDataFrame
+#'
 #' @export
 
 toSeg = function(x) {
@@ -58,12 +63,13 @@ toSeg = function(x) {
     # Add polygon attribute table entry to each segment
     if(class(x) %in% c("SpatialLinesDataFrame", "SpatialPolygonsDataFrame")) {
       attr_table =
-        # cbind(
-          x@data[rep(f, length(seg1)), ]#,
-          # wall = 1:length(seg1)
-        # )
+          x@data[rep(f, length(seg1)), , drop = FALSE]
       rownames(attr_table) = paste(f, 1:length(res))
-      seg1 = sp::SpatialLinesDataFrame(seg1, data = attr_table, match.ID = FALSE)
+      seg1 = sp::SpatialLinesDataFrame(
+        seg1,
+        data = attr_table,
+        match.ID = FALSE
+        )
     }
 
     seg[[f]] = seg1
