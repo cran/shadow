@@ -1,6 +1,7 @@
-934e735c8b35b8fdc8f57739e61110d6 *DESCRIPTION
+92aefa5c59b623a3153bcaf5ac3465cb *DESCRIPTION
 1fe7c06d303f4e7c578f62d469a382f4 *LICENSE
 54e965f646bd559bc3ee62a2133d3558 *NAMESPACE
+a02d0dca92392b190e0abc10009058a1 *NEWS.md
 392ddbf2499eb7227fdb0653e9c40bf4 *R/SVF.R
 fd7f9c7773ad790f9a7e23c09271e5c7 *R/SVFPnt.R
 39e3fdb94c25dc448b6025e79da7ae10 *R/checkInputs.R
@@ -23,9 +24,9 @@ fcd2e379f2c2da800cb09f7a8120cd20 *R/toSeg.R
 16bfe302e05609d5d7cfc0ba23200436 *data/park.RData
 a09d4fd1d6648f6f1d4d760f32458532 *data/rishon.RData
 c074b6bfa958298592f472efdabeacdc *data/sidewalk.RData
-3679bccb58d526f4500a87f5227729b3 *inst/doc/introduction.R
-86361c02b3be750f0268035e463f36dd *inst/doc/introduction.Rmd
-48ce7c0c8803d780545fd01db3e69f9d *inst/doc/introduction.html
+af739c57902ad3e24ab5501d9d97a1dd *inst/doc/introduction.R
+6d17f10360272b252f7b6ebb501c6cd2 *inst/doc/introduction.Rmd
+50179512a206b88f1f7e2c6edf0d385e *inst/doc/introduction.html
 a697850d9a213019196418d703b9636a *man/SVF.Rd
 bae894debbd1a0cf44300a1e65685ecd *man/block.Rd
 49ed4f9380dcbdc459aa01f7c847ed23 *man/build.Rd
@@ -46,8 +47,6 @@ b2c531940a5b7ad0dc0dbe884c4ba519 *tests/testthat.R
 07a65f38af292f450e7ac176304d1fbb *tests/testthat/test_SVF.R
 7cef83302676700ee67025e3c6caa873 *tests/testthat/test_shadowFootprint.R
 095159229779482c105b8073ee81fbc2 *tests/testthat/test_shadowHeight.R
-86361c02b3be750f0268035e463f36dd *vignettes/introduction.Rmd
-a78aa8e6127d59640a3d8f491cb67c05 *vignettes/shade_height.pdf
-948b3f6e643b804bc064e4747cc48765 *vignettes/shade_height.png
+6d17f10360272b252f7b6ebb501c6cd2 *vignettes/introduction.Rmd
 d0ca8f8bab2f5593e2c90efd3e5e45df *vignettes/shade_height.svg
 4d663adb2bbe96b9ed89bffa8900d420 *vignettes/shadow.bib

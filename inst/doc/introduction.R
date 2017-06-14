@@ -1,5 +1,6 @@
 ## ---- echo = FALSE-------------------------------------------------------
 knitr::opts_chunk$set(
+  dev = "svg",
   fig.align = "center",
   collapse = TRUE, 
   comment = "#>"
@@ -8,7 +9,7 @@ set.seed(1014)
 # options(dplyr.print_max = 10)
 
 ## ----trigdrawing, fig.cap="Shade height calculation", out.width="400px", echo=FALSE----
-knitr::include_graphics("shade_height.pdf")
+knitr::include_graphics("shade_height.svg")
 
 ## ---- message=FALSE------------------------------------------------------
 library(shadow)
@@ -64,7 +65,7 @@ r = shadowHeight(
   solar_pos = solar_pos
   )
 
-## ----heightresult, fig.cap="Shade height (m) grid", fig.height=5.5-------
+## ----heightresult, dev="png", fig.cap="Shade height (m) grid", fig.height=5.5----
 plot(r, col = grey(seq(0.9, 0.2, -0.01)))
 contour(r, add = TRUE)
 plot(rishon, add = TRUE, border = "red")
