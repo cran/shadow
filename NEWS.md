@@ -22,3 +22,10 @@
 * Correction in SVF calculation
 * Updated SVF tests and documentation
 * Expanded SVF example based on Erell et al. (2012)
+
+# shadow 0.4.5
+
+* Added 'surfaceGrid' function
+* Added 'plotGrid3D' function
+* Added 'inShadow' function
+* Corrections in documentation
