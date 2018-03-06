@@ -5,25 +5,32 @@
 #' \item{Obstacles outline (\code{obstacles}), given by a polygonal layer with a height attribute (\code{obstacles_height_field})}
 #' \item{Sun position (\code{solar_pos}), given by azimuth and elevation angles}
 #' }
-#' @note For a correct geometric calculation, make sure that:\itemize{
-#' \item{The layers \code{location} and \code{obstacles} are projected and in same CRS}
-#' \item{The values in \code{obstacles_height_field} of \code{obstacles} are given in the same distance units as the CRS (e.g. meters when using UTM)}
-#'}
 #'
 #' @param location A \code{SpatialPoints*} or \code{Raster*} object, specifying the location(s) for which to calculate shadow height
 #' @param obstacles A \code{SpatialPolygonsDataFrame} object specifying the obstacles outline
 #' @param obstacles_height_field Name of attribute in \code{obstacles} with extrusion height for each feature
-#' @param solar_pos A matrix with two columns representing sun position(s); first column is the solar azimuth (in degrees from North), second column is sun elevation (in degrees); rows represent different positions (e.g. at different times of day)
+#' @param solar_pos A matrix with two columns representing sun position(s); first column is the solar azimuth (in decimal degrees from North), second column is sun elevation (in decimal degrees); rows represent different positions (e.g. at different times of day)
 #' @param b Buffer size when joining intersection points with building outlines, to determine intersection height
-#' @param messages Whether a message regarding distance units of the CRS should be displayed
 #' @param parallel Number of parallel processes or a predefined socket cluster. With \code{parallel=1} uses ordinary, non-parallel processing. Parallel processing is done with the \code{parallel} package
 #' @param filter_footprint Should the points be filtered using \code{shadowFootprint} before calculating shadow height? This can make the calculation faster when there are many point which are not shaded
 #'
-#' @return Shadow height, in CRS units (e.g. meters). \code{NA} value means no shadow, \code{Inf} means complete shadow (i.e. sun below horizon).
+#' @return
+#' Returned object is either a numeric \code{matrix} or a \code{Raster*} -
 #' \itemize{
-#' \item{If input \code{location} is a \code{SpatialPoints*}, then returned object is a \code{matrix} with rows representing spatial locations (\code{location} features) and columns representing solar positions (\code{solar_pos} rows)}
-#' \item{If input \code{location} is a \code{Raster*}, then returned object is a \code{RasterLayer} or \code{RasterStack} representing shadow height surface for a single sun position or multiple sun positions, respectively}
+#' \item{If input \code{location} is a \code{SpatialPoints*}, then returned object is a \code{matrix}, where rows represent spatial locations (\code{location} features), columns represent solar positions (\code{solar_pos} rows) and values represent shadow height}
+#' \item{If input \code{location} is a \code{Raster*}, then returned object is a \code{RasterLayer} or \code{RasterStack} where layers represent solar positions (\code{solar_pos} rows) and pixel values represent shadow height}
 #' }
+#' In both cases the numeric values express shadow height -
+#' \itemize{
+#' \item{\code{NA} value means no shadow}
+#' \item{A \strong{valid number} expresses shadow height, in CRS units (e.g. meters)}
+#' \item{\code{Inf} means complete shadow (i.e. sun below horizon)}
+#' }
+#'
+#' @note For a correct geometric calculation, make sure that:\itemize{
+#' \item{The layers \code{location} and \code{obstacles} are projected and in same CRS}
+#' \item{The values in \code{obstacles_height_field} of \code{obstacles} are given in the same distance units as the CRS (e.g. meters when using UTM)}
+#'}
 #'
 #' @examples
 #' # Single location
@@ -75,7 +82,6 @@
 #'     obstacles = rishon,
 #'     obstacles_height_field = "BLDG_HT",
 #'     solar_pos = solar_pos,
-#'     messages = FALSE,
 #'     parallel = 3
 #'   )
 #'   y = Sys.time()
@@ -123,7 +129,6 @@ function(
   obstacles_height_field,
   solar_pos,
   b = 0.01,
-  messages = TRUE,
   parallel = getOption("mc.cores"),
   filter_footprint = FALSE
   ) {
@@ -131,7 +136,7 @@ function(
   # Checks
   .checkLocation(location, length1 = FALSE)
   .checkSolarPos(solar_pos, length1 = FALSE)
-  .checkObstacles(obstacles, obstacles_height_field, messages)
+  .checkObstacles(obstacles, obstacles_height_field)
 
   # Obstacles outline to 'lines' *** DEPENDS ON PACKAGE 'sp' ***
   obstacles_outline = as(obstacles, "SpatialLinesDataFrame")
@@ -157,8 +162,7 @@ function(
       footprint = shadowFootprint(
         obstacles = obstacles,
         obstacles_height_field = obstacles_height_field,
-        solar_pos = solar_pos[col, , drop = FALSE],
-        messages = FALSE
+        solar_pos = solar_pos[col, , drop = FALSE]
       )
       intersection_w_footprint = rgeos::gIntersects(location, footprint, byid = TRUE)[1, ]
     }
@@ -203,7 +207,6 @@ function(
             obstacles = obstacles,
             obstacles_height_field = obstacles_height_field,
             solar_pos = solar_pos[col, , drop = FALSE],
-            messages = FALSE
           )
           intersection_w_footprint = rgeos::gIntersects(location, footprint, byid = TRUE)[1, ]
         }
@@ -302,7 +305,6 @@ setMethod(
     obstacles_height_field,
     solar_pos,
     b = 0.01,
-    messages = TRUE,
     parallel = getOption("mc.cores"),
     filter_footprint = FALSE
   ) {
@@ -315,7 +317,6 @@ setMethod(
       obstacles_height_field = obstacles_height_field,
       solar_pos = solar_pos,
       b = b,
-      messages = messages,
       parallel = parallel,
       filter_footprint = filter_footprint
       )

@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2018-01-04" />
+<meta name="date" content="2018-03-06" />
 
 <title>Introduction to package shadow</title>
 
@@ -121,7 +121,7 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">Introduction to package <code>shadow</code></h1>
 <h4 class="author"><em><div style="white-space: pre-line;">Michael Dorman, Adi Vulkan, Evyatar Erell, Itai Kloog
 Ben-Gurion University of the Negev</div></em></h4>
-<h4 class="date"><em>2018-01-04</em></h4>
+<h4 class="date"><em>2018-03-06</em></h4>
 
 </div>
 
@@ -189,7 +189,6 @@ solar_pos
   obstacles_height_field = &quot;BLDG_HT&quot;, 
   solar_pos = solar_pos
   )
-#&gt; Assuming BLDG_HT given in projection units (m)
 h
 #&gt;          [,1]
 #&gt; [1,] 19.86451</code></pre>
@@ -221,43 +220,13 @@ Figure 3.2: Shade height at a single location
 <pre class="r"><code>ext = as(extent(rishon) + 50, &quot;SpatialPolygons&quot;)
 r = raster(ext, res = 2)
 proj4string(r) = proj4string(rishon)</code></pre>
-<!-- The following code section plots the input grid (Figure \@ref(fig:heightgrid)). -->
-<!-- ```{r heightgrid, fig.cap="Input grid for creating a shade heights surface"} -->
-<!-- plot(grid, pch = ".") -->
-<!-- plot(rishon, add = TRUE) -->
-<!-- ``` -->
-<!-- Calculating shade height at each point, using package `parallel` - -->
-<!-- ```{r, eval=FALSE} -->
-<!-- library(parallel) -->
-<!-- shade_heights = mclapply( -->
-<!--   split(grid, grid$grid_id), -->
-<!--   shadowHeight, -->
-<!--   obstacles = rishon,  -->
-<!--   obstacles_height_field = "BLDG_HT",  -->
-<!--   solar_pos = solar_pos, -->
-<!--   mc.cores = 3 -->
-<!--   ) -->
-<!-- r[] = simplify2array(shade_heights) -->
-<!-- ``` -->
-<!-- ```{r, echo=FALSE} -->
-<!-- for(i in 1:length(grid)) { -->
-<!--   r[i] = shadowHeight( -->
-<!--     location = grid[i, ], -->
-<!--     obstacles = rishon, -->
-<!--     obstacles_height_field = "BLDG_HT", -->
-<!--     solar_pos = solar_pos, -->
-<!--     messages = FALSE -->
-<!--     ) -->
-<!-- } -->
-<!-- ``` -->
 <p>Replacing <code>location</code> with the raster <code>r</code> we now can calculate a shadow height surface -</p>
 <pre class="r"><code>r = shadowHeight(
   location = r, 
   obstacles = rishon, 
   obstacles_height_field = &quot;BLDG_HT&quot;, 
   solar_pos = solar_pos
-  )
-#&gt; Assuming BLDG_HT given in projection units (m)</code></pre>
+  )</code></pre>
 <p>The resulting grid can plotted with following code section (Figure <a href="#fig:heightresult">3.3</a>). Note the partial shade on the roof of the 19.07-m building which is caused by the slightly taller 22.73-m building.</p>
 <pre class="r"><code>plot(r, col = grey(seq(0.9, 0.2, -0.01)))
 contour(r, add = TRUE)
@@ -285,7 +254,6 @@ plot(park, col = &quot;lightgreen&quot;, add = TRUE)</code></pre>
 Figure 3.4: Park location
 </p>
 </div>
-<pre><code>#&gt; Assuming BLDG_HT given in projection units (m)</code></pre>
 <p>Using <code>shadowFootprint</code> we can determine to what extent the palyground is shaded at a given time. For example, sun position at 2004-06-24 09:30:00 is (88.8, 46.7). The corresponding park shade proportion can be calculated by intersecting the shade footprint with park area and calculating the ratio. The result is 34.5%.</p>
 <pre class="r"><code>time2 = as.POSIXct(&quot;2004-06-24 09:30:00&quot;, tz = &quot;Asia/Jerusalem&quot;)
 solar_pos2 = maptools::solarpos(location_geo, time2)
@@ -297,7 +265,6 @@ footprint = shadowFootprint(
   obstacles_height_field = &quot;BLDG_HT&quot;, 
   solar_pos = solar_pos2
   )
-#&gt; Assuming BLDG_HT given in projection units (m)
 park_shade = gIntersection(park, footprint)
 shade_prop = gArea(park_shade) / gArea(park)
 shade_prop
@@ -352,8 +319,7 @@ for(i in 1:nrow(solar_pos_seq)) {
         shadowFootprint(
           obstacles = rishon, 
           obstacles_height_field = &quot;BLDG_HT&quot;, 
-          solar_pos = solar_pos_seq[i, , drop = FALSE],
-          messages = FALSE
+          solar_pos = solar_pos_seq[i, , drop = FALSE]
           )
     park_shade = gIntersection(park, footprint)
     if(is.null(park_shade))

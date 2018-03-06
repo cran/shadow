@@ -127,8 +127,7 @@ for(i in 1:nrow(solar_pos_seq)) {
         shadowFootprint(
           obstacles = rishon, 
           obstacles_height_field = "BLDG_HT", 
-          solar_pos = solar_pos_seq[i, , drop = FALSE],
-          messages = FALSE
+          solar_pos = solar_pos_seq[i, , drop = FALSE]
           )
     park_shade = gIntersection(park, footprint)
     if(is.null(park_shade))

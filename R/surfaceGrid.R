@@ -4,15 +4,16 @@
 #'
 #' @param obstacles A \code{SpatialPolygonsDataFrame} object specifying the obstacles outline
 #' @param obstacles_height_field Name of attribute in \code{obstacles} with extrusion height for each feature
-#' @param res Required grid resolution, in CRS units.
+#' @param res Required grid resolution, in CRS units
 #' @param offset Offset between grid points and facade (horizontal distance) or between grid points and roof (vertical distance).
 #' @note The reason for introducing an offset is to avoid ambiguity as for whether the grid points are "inside" or "outside" of the obstacle. With an offset all grid points are "outside" of the building and thus not intersecting it. \code{offset} should be given in CRS units; default is 0.01.
 #'
-#' @return A 3D \code{SpatialPointsDataFrame} layer, including all attributes of the original building to whose surface each point corresponds to, as well as new attributes:\itemize{
+#' @return A 3D \code{SpatialPointsDataFrame} layer, including all attributes of the original obstacles each surface point corresponds to, followed by six new attributes:\itemize{
+#' \item{\code{obs_id} Unique consecutive ID for each feature in \code{obstacles}}
 #' \item{\code{type} Either \code{"facade"} or \code{"roof"}}
-#' \item{\code{seg_id} Facade segment unique ID (only for 'facade' points)}
-#' \item{\code{xy_id} Facade ground location unique ID (only for 'facade' points)}
-#' \item{\code{az} The azimuth of the corresponding facade, in decimal degrees (only for 'facade' points)}
+#' \item{\code{seg_id} Unique consecutive ID for each facade segment (only for 'facade' points)}
+#' \item{\code{xy_id} Unique consecutive ID for each ground location (only for 'facade' points)}
+#' \item{\code{facade_az} The azimuth of the corresponding facade, in decimal degrees (only for 'facade' points)}
 #' }
 #'
 #' @seealso Function \code{\link{plotGrid}} to visualize grid.
@@ -29,6 +30,9 @@
 
 surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
 
+  # Check inputs
+  .checkObstacles(obstacles, obstacles_height_field)
+
   #######################################
   # Facade sample points
 
@@ -42,7 +46,6 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
   obstacles_outline = rgeos::gLineMerge(obstacles_outline)
 
   # Point sample along facades
-  obstacles_outline =
   facade_sample =
     spsample(
       obstacles_outline,
@@ -52,13 +55,13 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
 
   # Obstacles outline to segments
   seg = toSeg(obstacles)
-  seg$az = classifyAz(seg)
+  seg$facade_az = classifyAz(seg)
   seg$seg_id = 1:nrow(seg)
 
   # Segments buffer
   seg_b = rgeos::gBuffer(seg, width = offset, byid = TRUE)
 
-  # Classify 'az' per facade sample point
+  # Classify 'facade_az' per facade sample point
   facade_sample =
     SpatialPointsDataFrame(
       facade_sample,
@@ -66,7 +69,7 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
     )
 
   # Shift facade sample points 'away' from facades
-  facade_sample = shiftAz(facade_sample, az = facade_sample$az, dist = offset)
+  facade_sample = shiftAz(facade_sample, az = facade_sample$facade_az, dist = offset)
 
   facade_pnt = list()
   for(i in unique(facade_sample$obs_id)) {
@@ -83,7 +86,7 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
         data = cbind(
           tmp@data,
           height = h
-        )[rep(1, length(tmp)), ]
+        )
       )
       x$xy_id = 1:length(x)
       facade_pnt = c(facade_pnt, x)
@@ -93,53 +96,9 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
 
   # Rearrange columns
   facade_pnt$type = "facade"
-  pnt_names = c("type", "seg_id", "xy_id", "az", "height")
+  pnt_names = c("obs_id", "type", "seg_id", "xy_id", "facade_az", "height")
   other_names = setdiff(names(facade_pnt), pnt_names)
-  facade_pnt = facade_pnt[, c(pnt_names, other_names)]
-
-  # # Shift segments 'away' from obstacles
-  # seg_shifted = list()
-  # for(i in 1:nrow(seg)) {
-  #   seg_shifted[[i]] = shiftAz(seg[i, ], az = seg$az[i], dist = offset)
-  # }
-  # seg_shifted = mapply(spChFIDs, seg_shifted, row.names(seg))
-  # seg_shifted = do.call(rbind, seg_shifted)
-  #
-  # # Calculate sample points
-  # facade_pnt = list()
-  # for(i in 1:nrow(seg_shifted)) {
-  #   facade = seg_shifted[i, ]
-  #   facade$seg_id = i
-  #   facade_sample =
-  #     spsample(
-  #       facade,
-  #       n = round(rgeos::gLength(facade)) / res,
-  #       type = "regular"
-  #     )
-  #   sampled_heights = seq(
-  #     from = res / 2,
-  #     to = facade[[obstacles_height_field]],
-  #     by = res
-  #     )
-  #   for(h in sampled_heights) {
-  #     x = SpatialPointsDataFrame(
-  #       facade_sample,
-  #       data = cbind(
-  #         facade@data,
-  #         height = h
-  #       )[rep(1, length(facade_sample)), ]
-  #     )
-  #     x$xy_id = 1:length(x)
-  #     facade_pnt = c(facade_pnt, x)
-  #   }
-  # }
-  # facade_pnt = do.call(rbind, facade_pnt)
-  #
-  # # Rearrange columns
-  # facade_pnt$type = "facade"
-  # pnt_names = c("type", "seg_id", "xy_id", "az", "height")
-  # other_names = setdiff(names(facade_pnt), pnt_names)
-  # facade_pnt = facade_pnt[, c(pnt_names, other_names)]
+  facade_pnt = facade_pnt[, c(other_names, pnt_names)]
 
   #######################################
   # Roof sample points
@@ -151,18 +110,19 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
   )
   roof_pnt$seg_id = NA
   roof_pnt$xy_id = NA
-  roof_pnt$az = NA
+  roof_pnt$facade_az = NA
   roof_pnt@data = cbind(roof_pnt@data, over(roof_pnt, obstacles))
   roof_pnt$height = roof_pnt[[obstacles_height_field]] + offset
 
   # Rearrange columns
-  facade_pnt = facade_pnt[, c(pnt_names, other_names)]
+  roof_pnt = roof_pnt[, c(other_names, pnt_names)]
 
   # Combine
   combined_pnt = rbind(roof_pnt, facade_pnt)
 
   #######################################
   # Remove points encompassed "within" obstacle volume
+
   max_height = over(combined_pnt, obstacles[, obstacles_height_field], fn = max)
   max_height = max_height[[obstacles_height_field]]
   max_height[is.na(max_height)] = 0 # For points which do not intersect with 'obstacles'
@@ -171,6 +131,7 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
 
   #######################################
   # To 3D
+
   coords = coordinates(combined_pnt)
   coords = cbind(coords, h = combined_pnt$height)
   combined_pnt = SpatialPointsDataFrame(
@@ -178,6 +139,9 @@ surfaceGrid = function(obstacles, obstacles_height_field, res, offset = 0.01) {
     data = combined_pnt@data,
     proj4string = CRS(proj4string(obstacles))
   )
+
+  # Remove 'height' attribute
+  combined_pnt$height = NULL
 
   return(combined_pnt)
 

@@ -8,11 +8,11 @@
 \title{Shadow height calculation considering sun position and obstacles}
 \usage{
 \S4method{shadowHeight}{SpatialPoints}(location, obstacles,
-  obstacles_height_field, solar_pos, b = 0.01, messages = TRUE,
+  obstacles_height_field, solar_pos, b = 0.01,
   parallel = getOption("mc.cores"), filter_footprint = FALSE)
 
 \S4method{shadowHeight}{Raster}(location, obstacles, obstacles_height_field,
-  solar_pos, b = 0.01, messages = TRUE, parallel = getOption("mc.cores"),
+  solar_pos, b = 0.01, parallel = getOption("mc.cores"),
   filter_footprint = FALSE)
 }
 \arguments{
@@ -22,21 +22,25 @@
 
 \item{obstacles_height_field}{Name of attribute in \code{obstacles} with extrusion height for each feature}
 
-\item{solar_pos}{A matrix with two columns representing sun position(s); first column is the solar azimuth (in degrees from North), second column is sun elevation (in degrees); rows represent different positions (e.g. at different times of day)}
+\item{solar_pos}{A matrix with two columns representing sun position(s); first column is the solar azimuth (in decimal degrees from North), second column is sun elevation (in decimal degrees); rows represent different positions (e.g. at different times of day)}
 
 \item{b}{Buffer size when joining intersection points with building outlines, to determine intersection height}
-
-\item{messages}{Whether a message regarding distance units of the CRS should be displayed}
 
 \item{parallel}{Number of parallel processes or a predefined socket cluster. With \code{parallel=1} uses ordinary, non-parallel processing. Parallel processing is done with the \code{parallel} package}
 
 \item{filter_footprint}{Should the points be filtered using \code{shadowFootprint} before calculating shadow height? This can make the calculation faster when there are many point which are not shaded}
 }
 \value{
-Shadow height, in CRS units (e.g. meters). \code{NA} value means no shadow, \code{Inf} means complete shadow (i.e. sun below horizon).
+Returned object is either a numeric \code{matrix} or a \code{Raster*} -
 \itemize{
-\item{If input \code{location} is a \code{SpatialPoints*}, then returned object is a \code{matrix} with rows representing spatial locations (\code{location} features) and columns representing solar positions (\code{solar_pos} rows)}
-\item{If input \code{location} is a \code{Raster*}, then returned object is a \code{RasterLayer} or \code{RasterStack} representing shadow height surface for a single sun position or multiple sun positions, respectively}
+\item{If input \code{location} is a \code{SpatialPoints*}, then returned object is a \code{matrix}, where rows represent spatial locations (\code{location} features), columns represent solar positions (\code{solar_pos} rows) and values represent shadow height}
+\item{If input \code{location} is a \code{Raster*}, then returned object is a \code{RasterLayer} or \code{RasterStack} where layers represent solar positions (\code{solar_pos} rows) and pixel values represent shadow height}
+}
+In both cases the numeric values express shadow height -
+\itemize{
+\item{\code{NA} value means no shadow}
+\item{A \strong{valid number} expresses shadow height, in CRS units (e.g. meters)}
+\item{\code{Inf} means complete shadow (i.e. sun below horizon)}
 }
 }
 \description{
@@ -102,7 +106,6 @@ shadow = shadowHeight(
     obstacles = rishon,
     obstacles_height_field = "BLDG_HT",
     solar_pos = solar_pos,
-    messages = FALSE,
     parallel = 3
   )
   y = Sys.time()

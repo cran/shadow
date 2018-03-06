@@ -8,15 +8,13 @@
 \title{Sky View Factor (SVF) calculation}
 \usage{
 \S4method{SVF}{SpatialPoints}(location, obstacles, obstacles_height_field,
-  res_angle = 5, b = 0.01, messages = TRUE,
-  parallel = getOption("mc.cores"))
+  res_angle = 5, b = 0.01, parallel = getOption("mc.cores"))
 
 \S4method{SVF}{Raster}(location, obstacles, obstacles_height_field,
-  res_angle = 5, b = 0.01, messages = TRUE,
-  parallel = getOption("mc.cores"))
+  res_angle = 5, b = 0.01, parallel = getOption("mc.cores"))
 }
 \arguments{
-\item{location}{A \code{SpatialPoints*} or \code{Raster*} object, specifying the location(s) for which to calculate SVF. If \code{location} is \code{SpatialPoints*}, then it can have 2 or 3 dimensions. In the latter case the 3rd dimension is assumed to be elevation above ground (in CRS units).}
+\item{location}{A \code{SpatialPoints*} or \code{Raster*} object, specifying the location(s) for which to calculate SVF. If \code{location} is \code{SpatialPoints*}, then it can have 2 or 3 dimensions. In the latter case the 3rd dimension is assumed to be elevation above ground (in CRS units). If \code{location} is \code{RasterLayer} then SVF is calculated for ground locations represented by cell centers (raster values are ignored).}
 
 \item{obstacles}{A \code{SpatialPolygonsDataFrame} object specifying the obstacles outline}
 
@@ -26,15 +24,13 @@
 
 \item{b}{Buffer size when joining intersection points with building outlines, to determine intersection height}
 
-\item{messages}{Whether a message regarding distance units of the CRS should be displayed}
-
 \item{parallel}{Number of parallel processes or a predefined socket cluster. With \code{parallel=1} uses ordinary, non-parallel processing. Parallel processing is done with the \code{parallel} package}
 }
 \value{
 A numeric value between 0 (sky completely obstructed) and 1 (sky completely visible).
 \itemize{
-\item{If input \code{location} is a \code{SpatialPoints*}, then returned object is a \code{vector} elements representing spatial locations (\code{location} features).}
-\item{If input \code{location} is a \code{Raster*}, then returned object is a \code{RasterLayer} representing the SVF surface.}
+\item{If input \code{location} is a \code{SpatialPoints*}, then returned object is a \code{vector} where each element representing the SVF for each point in \code{location}}
+\item{If input \code{location} is a \code{Raster*}, then returned object is a \code{RasterLayer} where cell values express SVF for each ground location}
 }
 }
 \description{
