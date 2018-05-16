@@ -11,7 +11,7 @@
 #' @param obstacles A \code{SpatialPolygonsDataFrame} object specifying the obstacles outline
 #' @param obstacles_height_field Name of attribute in \code{obstacles} with extrusion height for each feature
 #' @param solar_pos A matrix with two columns representing sun position(s); first column is the solar azimuth (in degrees from North), second column is sun elevation (in degrees); rows represent different positions (e.g. at different times of day)
-#' @param ... Other parameters passed to \strong{\code{\link{shadowHeight}}}
+#' @param ... Other parameters passed to \strong{\code{\link{shadowHeight}}}, such as \code{parallel}
 #'
 #' @return
 #' Returned object is either a logical \code{matrix} or a \code{Raster*} with logical values -
@@ -32,15 +32,14 @@
 #'}
 #'
 #' @examples
-#'
 #' # Method for 3D points - Manually defined
 #'
 #' opar = par(mfrow = c(1, 3))
 #'
 #' # Ground level
 #' location = sp::spsample(
-#'   rgeos::gBuffer(rgeos::gEnvelope(rishon), width = 40),
-#'   n = 200,
+#'   rgeos::gBuffer(rgeos::gEnvelope(rishon), width = 20),
+#'   n = 100,
 #'   type = "regular"
 #' )
 #' solar_pos = as.matrix(tmy[9, c("sun_az", "sun_elev")])
