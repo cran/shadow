@@ -41,10 +41,21 @@
 * Removed the 'message' parameter
 * Added test for 'inShadow'
 
-# shadow 0.5.3
+# shadow 0.5.3 (2018-05-16)
 
 * Minor change in 'radiation' example
 * Expanded package vignette
 * Added test for 'radiation'
 * Added 'radius' parameter to 'radiation' for restricted obstacles search
+
+# shadow 0.5.5
+
+* 'returnList' argument in 'radiation'
+* Fixed mistakes in the 'time' column of 'tmy'
+* Added temperature and wind speed columns in 'tmy'
+* Update vignette to comply with noew 'tmy' table
+
+# To do
+
+* Add 'sf' support (?)
 
