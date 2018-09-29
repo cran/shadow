@@ -48,14 +48,22 @@
 * Added test for 'radiation'
 * Added 'radius' parameter to 'radiation' for restricted obstacles search
 
-# shadow 0.5.5
+# shadow 0.5.5 (2018-07-19)
 
 * 'returnList' argument in 'radiation'
 * Fixed mistakes in the 'time' column of 'tmy'
 * Added temperature and wind speed columns in 'tmy'
 * Update vignette to comply with noew 'tmy' table
 
+# shadow 0.5.7
+
+* Added 'beersheva' sample dataset with Beer-Sheva buildings
+* Added 'tmy2' sample dataset with Beer-Sheva TMY data
+* Added 'elev' sample dataset with Beer-Sheva elevation
+* Fixed 'Obstacles outline union' step in 'surfaceGrid' function to work with polygons with holes
+
 # To do
 
 * Add 'sf' support (?)
+* Visibility algorithm (e.g. https://www.redblobgames.com/articles/visibility/)
 
