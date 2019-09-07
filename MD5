@@ -1,7 +1,7 @@
-4f38a21aba6337549c22204b076ca772 *DESCRIPTION
-aa16d9cb4cc2761226391c60bbd5455a *LICENSE
+b8485f7605c0803330bd457928e7f592 *DESCRIPTION
+48ad36712a0e88eadc76b995bbde54df *LICENSE
 fff0a32685000365978778a78df35b09 *NAMESPACE
-ebfd871ec45bea5f744a9e0e9819280d *NEWS.md
+5e6fb98c9cc0be71c2dc0e5431752669 *NEWS.md
 e067cba825d8a7e149f5616bbf22d40d *R/SVF.R
 c591ec375337d3aefa7c4e1c47e66189 *R/SVFPnt.R
 b32cc0bbe7bfd431786552d09dba1c3f *R/checkInputs.R
@@ -23,10 +23,10 @@ b234a89c1b4e581bf342d7155f2a4835 *R/shadow-package.R
 aea278aba91086ee9272cea12ee96459 *R/shiftAz.R
 5addf52151bfc9a76d74207992f1dcf8 *R/solarpos2.R
 0f82143ced6dda46681318f4d3067b9e *R/sunLocation.R
-d8ebce3adfe99080397e21823969eb1d *R/surfaceGrid.R
+6f8b8e78ccbbd175942553466f43d614 *R/surfaceGrid.R
 21084f0c6440ca73ceebe1d0b2038e0f *R/toGMT.R
 5f5d702b4458ad227bb17e82a578e039 *R/toSeg.R
-f4ecbddd16c45a76d805ecd8c1c1126c *build/vignette.rds
+0d61b7969af85298e15cef71f9caf8c3 *build/vignette.rds
 26437a44b7137b01e6375c65205cab98 *data/beersheva_build.RData
 b465a7bfe95fe4d86b794d0d9e6421de *data/beersheva_elev.RData
 4a8181be38f08c9e9231d5ec523ab508 *data/boston_block.RData
@@ -60,7 +60,7 @@ f5bfff757047e82d2ca23d1a56043656 *man/shadow.Rd
 389c997d6014244744264f61312f7fab *man/shadowHeight.Rd
 260bc21377c82e1adc49cc0343f32dbd *man/shiftAz.Rd
 1dd8185bc2255d1fe0d96d97c059aafc *man/solarpos2.Rd
-2432a4fd42c5ad690b60c7caca05ebae *man/surfaceGrid.Rd
+d972e17fa249ef36da62f27291b917d6 *man/surfaceGrid.Rd
 33e4ba66762199d69236e99edd34918d *man/tmy.Rd
 24e7f30aeda78bb7aa984783a0da76ae *man/tmy2.Rd
 8a95c682631c5d7f40b09906909196b7 *man/toGMT.Rd
