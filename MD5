@@ -1,7 +1,7 @@
-b8485f7605c0803330bd457928e7f592 *DESCRIPTION
+deee3307817596220f975c8a1d2a1787 *DESCRIPTION
 48ad36712a0e88eadc76b995bbde54df *LICENSE
 fff0a32685000365978778a78df35b09 *NAMESPACE
-5e6fb98c9cc0be71c2dc0e5431752669 *NEWS.md
+a49b2c6503e7fa9788f4a0ba3ad6ee59 *NEWS.md
 e067cba825d8a7e149f5616bbf22d40d *R/SVF.R
 c591ec375337d3aefa7c4e1c47e66189 *R/SVFPnt.R
 b32cc0bbe7bfd431786552d09dba1c3f *R/checkInputs.R
@@ -36,7 +36,7 @@ b465a7bfe95fe4d86b794d0d9e6421de *data/beersheva_elev.RData
 f994db349cab24ee04035afa60c62c58 *data/build.RData
 c0ea08fe559c84cc83d12bbd39c7d4f3 *data/tmy.RData
 d8d4d85f93eb9d93c2bb33ea05588436 *data/tmy2.RData
-db76f15b2c82a8c70fcb7ba8dd925a98 *inst/doc/introduction.pdf
+0936d0753c151654bda4cc68d47fbb2a *inst/doc/introduction.pdf
 3075dd611c34df96502a4ceedf082b2b *inst/doc/introduction.pdf.asis
 907d0187ef800a34060d4ddc2615a703 *man/SVF.Rd
 c45aa1afaa4ac04695543d725a98277f *man/beersheva_build.Rd
