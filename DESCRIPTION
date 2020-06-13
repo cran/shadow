@@ -1,7 +1,7 @@
 Package: shadow
 Type: Package
 Title: Geometric Shadow Calculations
-Version: 0.6.4.1
+Version: 0.6.7
 Authors@R: c(
     person("Michael", "Dorman", email = "dorman@post.bgu.ac.il", role = c("aut", "cre")),
     person("Evyatar", "Erell", email = "erell@bgu.ac.il", role = c("ctb")),
@@ -11,21 +11,21 @@ Description: Functions for calculating: (1) shadow height, (2) logical shadow fl
 License: MIT + file LICENSE
 LazyData: TRUE
 Imports: rgeos (>= 0.3), raster (>= 2.4-15), methods, parallel (>=
-        3.4.0), plyr (>= 1.8.4)
+        3.4.0)
 Depends: R (>= 3.2.3), sp (>= 1.1.1)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests: R.rsp, maptools (>= 0.8), testthat, reshape2 (>= 1.4.2),
-        threejs, rgdal
+        threejs, rgdal, stars
 VignetteBuilder: R.rsp
 URL: https://github.com/michaeldorman/shadow/
 BugReports: https://github.com/michaeldorman/shadow/issues/
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2020-03-30 12:11:11 UTC; hornik
+Packaged: 2020-06-13 08:06:00 UTC; michael
 Author: Michael Dorman [aut, cre],
   Evyatar Erell [ctb],
   Itai Kloog [ctb],
   Adi Vulkan [ctb]
 Maintainer: Michael Dorman <dorman@post.bgu.ac.il>
 Repository: CRAN
-Date/Publication: 2020-04-01 05:42:13 UTC
+Date/Publication: 2020-06-13 08:20:02 UTC

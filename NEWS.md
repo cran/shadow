@@ -87,19 +87,29 @@
 
 * Replaced vignette with final version of R-Journal paper
 
-## shadow 0.6.4
+## shadow 0.6.4 (2020-02-03)
 
 * Replaced 'class(x) == "matrix"' to comply with R syntax
 
-## To do
+## shadow 0.6.4.1 (2020-04-01)
 
+* Automatic update by Kurt Hornik to reduce PDF size
+
+## shadow 0.6.7
+
+* Removed 'plyr' dependency
+* Removed function 'flowlength' (moved to package 'geobgu')
+* Fixed 'shadowFootprint' error when the polygon has duplicated points by removing zero-length segments
+* Reduced vignette PDF size
+
+## Other ideas
+
+* Replace 'testthat' with 'tinytest'
 * Switch from 'sp' to 'sf'
-* Add tests
+* Add new tests
 * Set 'surfacegrid' class and define 'print' and 'plot' methods for it
 * Pass obstacles height as 'units' and check for agreement with CRS units
 * Return 'shadowHeight' as 'units' matrix
-
-## Other algorithms to add
-
 * Visibility algorithm (e.g. https://www.redblobgames.com/articles/visibility/)
+
 
