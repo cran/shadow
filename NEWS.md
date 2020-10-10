@@ -102,18 +102,23 @@
 * Fixed 'shadowFootprint' error when the polygon has duplicated points by removing zero-length segments
 * Reduced vignette PDF size
 
-## shadow 0.6.8
+## shadow 0.6.8 (2020-08-25)
 
 * Replaced sample 'sp' layers to comply with WKT2 CRS specification
 
+## shadow 0.6.9
+
+* Revision of CRS in sample data (by Roger Bivand)
+* Added 'pkgdown' site
+* Set CRS of 'build' to 'NA' to avoid check errors
+
 ## Other ideas
 
-* Replace 'testthat' with 'tinytest'
+* Replace article with up-to-date PDF vignette
+* Fix CRS warnings
 * Switch from 'sp' to 'sf'
 * Add new tests
 * Set 'surfacegrid' class and define 'print' and 'plot' methods for it
 * Pass obstacles height as 'units' and check for agreement with CRS units
 * Return 'shadowHeight' as 'units' matrix
 * Visibility algorithm (e.g. https://www.redblobgames.com/articles/visibility/)
-
-
