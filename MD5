@@ -1,7 +1,7 @@
-5ca54ebc0eb10456cb955f2579d87b78 *DESCRIPTION
+85a57e0793bbbc0018f67808bb29538d *DESCRIPTION
 2b68ef7d4f3f35f660f181e38e70fadb *LICENSE
 7b0d04bb60ac4cbcca51295743c2a045 *NAMESPACE
-1bc66d841bafd51310ef843f800887ed *NEWS.md
+e3ac30e58f66be8b8f7bf98f077f3642 *NEWS.md
 e067cba825d8a7e149f5616bbf22d40d *R/SVF.R
 c591ec375337d3aefa7c4e1c47e66189 *R/SVFPnt.R
 119acdc9c407b4685c0193f72e57bc68 *R/checkInputs.R
@@ -25,7 +25,7 @@ aea278aba91086ee9272cea12ee96459 *R/shiftAz.R
 6f8b8e78ccbbd175942553466f43d614 *R/surfaceGrid.R
 21084f0c6440ca73ceebe1d0b2038e0f *R/toGMT.R
 5f5d702b4458ad227bb17e82a578e039 *R/toSeg.R
-74bb4a83df73705dfa4505797b1cc510 *build/vignette.rds
+7572d9b48523631a0d581e21870123f8 *build/vignette.rds
 58b3914858ac0d005afc3b1ef09a692f *data/beersheva_build.RData
 4a189d670be82bb26bf8ae72ea3d266c *data/beersheva_elev.RData
 355a3f1e26d3ee80fed473ed78bcbccf *data/boston_block.RData
@@ -35,8 +35,8 @@ d2614bd26842f5f0026a0d431e1e6b82 *data/boston_sidewalk.RData
 868e6d07c0856db3a825fdef13de9b8d *data/build.rda
 c0ea08fe559c84cc83d12bbd39c7d4f3 *data/tmy.RData
 d8d4d85f93eb9d93c2bb33ea05588436 *data/tmy2.RData
-943e98588d2cac93d61dd1429ff5b179 *inst/doc/introduction.pdf
-3075dd611c34df96502a4ceedf082b2b *inst/doc/introduction.pdf.asis
+51d86156fe748206bf6329ab5bc18b9c *inst/doc/introduction2.pdf
+05d9cd9db1827f3865778761f2849179 *inst/doc/introduction2.pdf.asis
 6e619b5d63f3d4c980a29d90590fac41 *man/SVF.Rd
 0554f817f30eafbe66d3f42de2678c32 *man/beersheva_build.Rd
 883afdd3f65b9160235a0de4aeceaacf *man/beersheva_elev.Rd
@@ -69,4 +69,4 @@ f65d0a2d5578b033b30632cc26e1dedc *tests/testthat/test_inShadow.R
 8f69c04bd26357997f1278050235795c *tests/testthat/test_radiation.R
 d3a0fae41cb0388c758ba3eec3e3cac1 *tests/testthat/test_shadowFootprint.R
 e877ec86ae713bd5af652f66ccbe210c *tests/testthat/test_shadowHeight.R
-3075dd611c34df96502a4ceedf082b2b *vignettes/introduction.pdf.asis
+05d9cd9db1827f3865778761f2849179 *vignettes/introduction2.pdf.asis
