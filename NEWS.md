@@ -112,9 +112,13 @@
 * Added 'pkgdown' site
 * Set CRS of 'build' to 'NA' to avoid check errors
 
-## shadow 0.7.0
+## shadow 0.7.0 (2020-12-16)
 
 * Added revised vignette 'introduction2'
+
+## shadow 0.7.1
+
+* Fixed vignette name
 
 ## Other ideas
 
